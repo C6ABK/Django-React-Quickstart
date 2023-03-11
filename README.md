@@ -9,6 +9,7 @@
 ## Notes for codeanywhere IDE
 - Go into settings.py and allow all hosts
 - `python manage.py runserver 0.0.0.0:8000`
+- Add `CSRF_TRUSTED_ORIGINS=['https://*yourdomain.com']` to settings.py
   
 ## Creating Backend Server
 - `python3 manage.py startapp todo`
