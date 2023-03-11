@@ -171,6 +171,14 @@ def perform_create(self, serializer):
 ## Permissions
 - Go to `/api/views.py` and modify as below
 
-```
-from rest_framework import generics, ** permissions **
-```
+<pre>
+from rest_framework import generics, <b>permissions</b>
+from .serializers import TodoSerializer
+from todo.models import Todo
+
+class TodoListCreate(generics.ListCreateAPIView):
+  ...
+  serializer_class = TodoSerializer
+  <b>permission_classes = [permissions.IsAuthenticated]</b>
+  ...
+</pre>
