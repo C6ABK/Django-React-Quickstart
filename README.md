@@ -22,7 +22,7 @@ INSTALLED_APPS = [
   ]
 ```
 
-### Open models.py and modify as below
+### Open /todo/models.py and modify as below
 ```
 from django.db import models
 from django.contrib.auth.models import User
