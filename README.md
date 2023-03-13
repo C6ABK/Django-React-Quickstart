@@ -192,3 +192,16 @@ class TodoListCreate(generics.ListCreateAPIView):
     <b>path('todos.<int:pk>', views.TodoRetrieveUpdateDestroy.as_view()),</b>
   ]
 </pre>
+- Go to `/api/views.py` and add the TodoRetrieveUpdateDestroy generic view...
+```
+...
+class TodoListCreate(generics.ListCreateAPIView):
+...
+class TodoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+  serializer_class = TodoSerializer
+  permission_classes = [permissions.IsAuthenticated]
+  
+  def get_queryset(self):
+    user = self.request.user
+    return Todo.objects.filter(user=user)
+```
