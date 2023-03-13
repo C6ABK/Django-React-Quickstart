@@ -189,7 +189,7 @@ class TodoListCreate(generics.ListCreateAPIView):
 <pre>
   urlpatterns = [
     path('todos/', views.TodoListCreate.as_view()),
-    <b>path('todos.<int:pk>', views.TodoRetrieveUpdateDestroy.as_view()),</b>
+    <b>path('todos/<int:pk>', views.TodoRetrieveUpdateDestroy.as_view()),</b>
   ]
 </pre>
 - Go to `/api/views.py` and add the TodoRetrieveUpdateDestroy generic view...
@@ -203,5 +203,15 @@ class TodoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
   
   def get_queryset(self):
     user = self.request.user
+    # User can only update, delete own posts
     return Todo.objects.filter(user=user)
 ```
+## Completing a Todo
+- Go to `/api/urls.py` and add the path below...
+<pre>
+  urlpatterns = [
+    path('todos/', views.TodoListCreate.as_view()),
+    path('todos/<int:pk>', views.TodoRetrieveUpdateDestroy.as_view()),
+    <b>path('todos/<int:pk>/complete', views.TodoToggleComplete.as_view())</b>
+  ]
+</pre>
