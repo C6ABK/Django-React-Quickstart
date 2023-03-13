@@ -235,3 +235,81 @@ class TodoToggleComplete(generics.UpdateAPIView):
     serializer.instance.completed=not(serializer.instance.completed)
     serializer.save()
 ```
+
+- Go to `/api/serializers.py` and add the code below...
+
+```
+class TodoToggleCompleteSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Todo
+    fields = ['id']
+    read_only_fields = ['title', 'memo', 'created', 'completed']
+```
+
+## Authentication - Sign Up
+- Go to `/backend/settings.py` and add the authtoken app to the `INSTALLED_APPS`
+
+```
+INSTALLED_APPS = [
+  ...
+  'todo',
+  'rest_framework',
+  'api',
+  'rest_framework.authtoken',
+]
+```
+
+- `python3 manage.py migrate`
+- Add the code below in `/backend/settings.py`
+
+```
+...
+REST_FRAMEWORK = {
+  'DEFAULT_AUTHENTICATION_CLASSES':[
+    'rest_framework.authentication.TokenAuthentication',
+  ]
+}
+```
+
+- Go to `/api/urls.py` and add the signup endpoint
+
+```
+urlpatterns = [
+  ...
+  path('signup/', views.signup),
+]
+```
+
+- Go to `/api/views.py` and modify as below
+
+```
+...
+from todo.models import Todo
+from django.db import IntegrityError
+from django.contrib.auth.models import User
+from rest_framework.parsers import JSONParser
+from rest_framework.authtoken.models import Token
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+...
+class TodoToggleComplete(generics.UpdateAPIView):
+...
+@csrf_exempt
+def signup(request):
+  if request.method == 'POST':
+    try:
+      data  = JSONParser().parse(request)
+      user = User.objects.create_user(
+        username=data['username'],
+        password=data['password']
+      )
+      user.save()
+      
+      token = Token.objects.create(user=user)
+      return JsonResponse({'token':str(token)}, status=201)
+    except IntegrityError:
+      return JsonResponse(
+        {'error':'Username taken. Please choose another.'},
+        status=400
+      )
+```
