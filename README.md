@@ -193,6 +193,7 @@ class TodoListCreate(generics.ListCreateAPIView):
   ]
 </pre>
 - Go to `/api/views.py` and add the TodoRetrieveUpdateDestroy generic view...
+
 ```
 ...
 class TodoListCreate(generics.ListCreateAPIView):
@@ -206,6 +207,7 @@ class TodoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     # User can only update, delete own posts
     return Todo.objects.filter(user=user)
 ```
+
 ## Completing a Todo
 - Go to `/api/urls.py` and add the path below...
 <pre>
@@ -215,3 +217,21 @@ class TodoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     <b>path('todos/<int:pk>/complete', views.TodoToggleComplete.as_view())</b>
   ]
 </pre>
+- Go to `/api/views.py` and add the code below...
+
+```
+...
+from .serializers import TodoSerializer, TodoToggleCompleteSerializer
+...
+class TodoToggleComplete(generics.UpdateAPIView):
+  serializer_class = TodoToggleCompleteSerializer
+  permission_classes = [permissions.IsAuthenticated]
+  
+  def get_queryset(self):
+    user = self.request.user
+    return Todo.objects.filter(user=user)
+    
+  def perform_update(self, serializer):
+    serializer.instance.completed=not(serializer.instance.completed)
+    serializer.save()
+```
