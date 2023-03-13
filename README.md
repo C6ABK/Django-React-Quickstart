@@ -183,3 +183,12 @@ class TodoListCreate(generics.ListCreateAPIView):
   <b>permission_classes = [permissions.IsAuthenticated]</b>
   ...
 </pre>
+
+## Other CRUD Operations
+- Go to `/api/urls.py` and add the path below
+<pre>
+  urlpatterns = [
+    path('todos/', views.TodoListCreate.as_view()),
+    <b>path('todos.<int:pk>', views.TodoRetrieveUpdateDestroy.as_view()),</b>
+  ]
+</pre>
