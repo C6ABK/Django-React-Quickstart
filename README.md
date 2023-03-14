@@ -315,3 +315,44 @@ def signup(request):
 ```
 
 ## Authentication - Log In Tokens
+- Go to `/api/urls.py` and add the path
+
+```
+urlpatterns = [
+  ...
+  path('login/', views.login),
+]
+```
+
+- Go to `/api/view.py` to add the login view...
+
+```
+...
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import authenticate
+
+...
+
+@csrf_exempt
+def login(request):
+  if request.method=='POST':
+    data = JSONParser().parse(request)
+    user = authenticate(
+      request,
+      username=data['username'],
+      password=data['password']
+    )
+    if user is None:
+      return JsonResponse(
+        {'error':'Unable to login. Check username and password'},
+        status=400
+      )
+    else # Return user token
+      try:
+        token = Token.objects.get(user=user)
+      except: # If token not in db, create a new one
+        token = Token.objects.create(user=user)
+      
+      return JsonResponse({'token':str(token)}, status=201)
+    
+```
