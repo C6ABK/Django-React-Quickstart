@@ -172,7 +172,7 @@ def perform_create(self, serializer):
 ## Permissions
 - Go to `/api/views.py` and modify as below
 
-<pre>
+```
 from rest_framework import generics, <b>permissions</b>
 from .serializers import TodoSerializer
 from todo.models import Todo
@@ -180,9 +180,9 @@ from todo.models import Todo
 class TodoListCreate(generics.ListCreateAPIView):
   ...
   serializer_class = TodoSerializer
-  <b>permission_classes = [permissions.IsAuthenticated]</b>
+  permission_classes = [permissions.IsAuthenticated]
   ...
-</pre>
+```
 
 ## Other CRUD Operations
 - Go to `/api/urls.py` and add the path below
@@ -210,13 +210,15 @@ class TodoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
 ## Completing a Todo
 - Go to `/api/urls.py` and add the path below...
-<pre>
+
+```
   urlpatterns = [
     path('todos/', views.TodoListCreate.as_view()),
     path('todos/<int:pk>', views.TodoRetrieveUpdateDestroy.as_view()),
-    <b>path('todos/<int:pk>/complete', views.TodoToggleComplete.as_view())</b>
+    path('todos/<int:pk>/complete', views.TodoToggleComplete.as_view())
   ]
-</pre>
+```
+
 - Go to `/api/views.py` and add the code below...
 
 ```
