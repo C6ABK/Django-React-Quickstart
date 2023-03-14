@@ -186,12 +186,12 @@ class TodoListCreate(generics.ListCreateAPIView):
 
 ## Other CRUD Operations
 - Go to `/api/urls.py` and add the path below
-<pre>
+```
   urlpatterns = [
     path('todos/', views.TodoListCreate.as_view()),
-    <b>path('todos/<int:pk>', views.TodoRetrieveUpdateDestroy.as_view()),</b>
+    path('todos/<int:pk>', views.TodoRetrieveUpdateDestroy.as_view()),
   ]
-</pre>
+```
 - Go to `/api/views.py` and add the TodoRetrieveUpdateDestroy generic view...
 
 ```
