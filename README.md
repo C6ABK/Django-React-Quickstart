@@ -173,7 +173,7 @@ def perform_create(self, serializer):
 - Go to `/api/views.py` and modify as below
 
 ```
-from rest_framework import generics, <b>permissions</b>
+from rest_framework import generics, permissions
 from .serializers import TodoSerializer
 from todo.models import Todo
 
