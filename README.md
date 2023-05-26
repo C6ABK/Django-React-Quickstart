@@ -349,7 +349,7 @@ def login(request):
         {'error':'Unable to login. Check username and password'},
         status=400
       )
-    else # Return user token
+    else: # Return user token
       try:
         token = Token.objects.get(user=user)
       except: # If token not in db, create a new one
